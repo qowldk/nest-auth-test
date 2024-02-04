@@ -9,13 +9,14 @@ import {
 } from '@nestjs/common';
 import { User } from './user.entity';
 import { UserService } from './user.service';
+import { CreateUserDto, UpdateUserDto } from './user.dto';
 
 @Controller('user') // ❶ 컨트롤러 설정 데코레이터
 export class UserController {
   constructor(private userService: UserService) {} // ❷ 유저 서비스를주입
 
   @Post('/create')
-  createUser(@Body() user: User) {
+  createUser(@Body() user: CreateUserDto) {
     // ❸ 유저 생성
     return this.userService.createUser(user);
   }
@@ -29,7 +30,7 @@ export class UserController {
   }
 
   @Put('/update/:email')
-  updateUser(@Param('email') email: string, @Body() user: User) {
+  updateUser(@Param('email') email: string, @Body() user: UpdateUserDto) {
     // ❺ 유저 정보 업데이트
     console.log(user);
     return this.userService.updateUser(email, user);
