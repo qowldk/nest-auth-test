@@ -35,4 +35,19 @@ export class AuthService {
       throw new HttpException('서버 에러', 500);
     }
   }
+
+  async validateUser(email: string, password: string) {
+    const user = await this.userSerivice.getUser(email); // ❶ 이메일로 유저 정보를 받아옴
+
+    if (!user) {
+      // ❷ 유저가 없으면 검증 실패
+      return null;
+    }
+    const { password: hashedPassword, ...userInfo } = user; // ❸ 패스워드를 따로 뽑아냄
+    if (bcrypt.compareSync(password, hashedPassword)) {
+      // ❹ 패스워드가 일치하면 성공
+      return userInfo;
+    }
+    return null;
+  }
 }
